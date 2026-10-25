@@ -1,0 +1,10 @@
+# ADR-1007: new crate versions wait one day before `cargo add` / `cargo update` will pick them.
+# Gates resolution only — versions already in Cargo.lock are kept, and `--locked` builds
+# (ADR-1006) are unaffected. Matches the one-day age gate on the TypeScript side.
+#
+# Native from Rust 1.100 (2026-11-12). On older Cargo this is inert and prints one warning,
+# "ignoring `registry.global-min-publish-age` without `-Zmin-publish-age`"; builds still pass.
+# Deliberate bypass for an urgent security release (record why):
+#   CARGO_RESOLVER_INCOMPATIBLE_PUBLISH_AGE=allow cargo update -p <crate>
+[registry]
+global-min-publish-age = "1 day"

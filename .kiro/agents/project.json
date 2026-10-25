@@ -1,0 +1,17 @@
+{
+  "name": "project",
+  "description": "Project agent for repos built from cr-ci-cd-rust-typescript-template: loads CLAUDE.md and the template's skills (new-project, project-conventions, stance-review) straight from .claude/, so Claude Code and Kiro share one source.",
+  "prompt": "CLAUDE.md is this project's standing instructions; follow it. On the first session in a fresh clone, use the new-project skill. Load project-conventions before writing an ADR, a journal entry, or core code. Use stance-review for the monthly review.",
+  "model": "claude-sonnet-4.5",
+  "tools": ["*"],
+  "allowedTools": ["fs_read"],
+  "resources": [
+    "file://CLAUDE.md",
+    "file://README.md",
+    "file://docs/adr/README.md",
+    "file://.kiro/steering/**/*.md",
+    "file://~/.kiro/steering/*.md",
+    "skill://.claude/skills/**/SKILL.md"
+  ],
+  "welcomeMessage": "project agent: CLAUDE.md + template skills loaded (new-project, project-conventions, stance-review)."
+}
