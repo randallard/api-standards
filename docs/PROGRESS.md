@@ -4,18 +4,15 @@ _Last updated: 2026-11-01_
 
 ## Status / next
 
-**Status:** v0.1 is committed, after Ryan's review on 2026-11-01. The NLGov and GOV.UK
-citations stay as references, the template's ADR-1018 (OSV-Scanner v2.7.0) is adopted, and the
-private scrub check is clean. Local checks: `pnpm lint` (eslint + markdownlint),
-`pnpm lint:examples`, `pnpm test` (30 tests) and `pnpm build` all pass.
+**Status:** **v0.1.0 is tagged and public, and CI is green** (2026-11-01). The NLGov and
+GOV.UK citations stay as references, the template's ADR-1018 (OSV-Scanner v2.7.0) is adopted,
+and four dev-tooling advisories are overridden in `pnpm-workspace.yaml`. The README's
+`extends:` URL resolves. See [journal 11-01](journal/2026-11-01-first-ci-run-and-v0-1-0.md).
 
 **Next:**
 
-1. Watch the first CI run, especially `link-check` and `ts supply chain` (licence allowlist,
-   audit signatures), which haven't run in CI yet.
-2. Tag `v0.1.0`, so the `extends:` URL in the README resolves, then make the repo public.
-3. The template picks the standard up (ADR-1019 there, an `api-lint` job), in the private
-   `api-standards-in-template` effort.
+1. A stance review, now that CI has run (clears the docs-hygiene warning).
+2. The worklist below: further rules, each a minor release.
 
 ## Architecture
 
@@ -67,4 +64,5 @@ _History accretes below, oldest first. See [`journal/`](journal/README.md) for t
 - 2026-10-24: scaffolded from the template; standard v0.1, ruleset (22 rules) and harness
   written; uncommitted, waiting on local review.
 - 2026-11-01: reviewed; the NLGov and GOV.UK citations stay. ADR-1018 adopted from the template.
-  Committed; homed on `data`; pushed to GitHub.
+  Committed, homed and pushed. The first CI run failed on four new advisories, which are now
+  overridden. Tagged `v0.1.0`, made the repo public, and CI is green.
