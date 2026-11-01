@@ -12,3 +12,19 @@ trustPolicy: no-downgrade
 
 # Transitive dependencies resolve from the registry only: no git URLs or tarballs.
 blockExoticSubdeps: true
+
+# Advisory overrides, each bounded to the line it fixes. All four reach dev tooling only (doc
+# lint, eslint, the licence check); this repo ships a standard and a ruleset, no dependencies.
+overrides:
+  # 2026-10-30, published 23:09 UTC, fixed only in a new major. glob 13 comes via
+  # license-checker-rseidelsohn 5 → @npmcli; 14 brings minimatch 11 (fixed).
+  "glob@13": ">=14.0.2 <15" # GHSA-3g3m-2fjr-6pw4
+  # 2026-10-30: minimatch 10 (via @eslint/config-array and @npmcli) to the fixed 11.0.1+, same
+  # engines and API. There's no minimatch 3 in this tree, so no ignore is needed (unlike repos
+  # still on an eslint that pulls 3).
+  "minimatch@10": ">=11.0.1 <12" # GHSA-g3hv-75wg-m249
+  # markdownlint 0.42.0 pins re2js 2.8.6 exactly; 2.8.7 is the fix, same major.
+  "re2js@2": ">=2.8.7 <3" # GHSA-gg6h-894w-4m9c
+  # Via markdownlint → micromark-extension-math, which only parses math (it never renders with
+  # katex). Retire when micromark-extension-math depends on katex >= 0.18.2.
+  "katex@0.16": ">=0.18.2 <0.19"
