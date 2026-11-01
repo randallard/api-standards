@@ -1,0 +1,13 @@
+# Link check for the standard and the docs (ADR-0004). Run in CI by lychee-action.
+max_retries = 3
+retry_wait_time = 5
+timeout = 30
+# 429: rate limited, not broken. 403: some publishers refuse non-browser clients.
+accept = ["200..=299", "403", "429"]
+exclude = [
+  # Placeholder hosts in the examples and the worked example.
+  "^https?://([a-z0-9-]+\\.)*example\\.com",
+  # Raw ruleset URL for a tag that exists only once a release is cut.
+  "^https://raw\\.githubusercontent\\.com/randallard/api-standards/",
+]
+exclude_path = ["node_modules", ".tools", "docs/adr/1"]

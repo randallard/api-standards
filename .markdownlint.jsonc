@@ -1,0 +1,14 @@
+// Markdown lint rules for the standard and the repo's own docs (ADR-0004).
+{
+  "default": true,
+  // Prose is wrapped by hand near 100 columns; tables and links run longer than any limit.
+  "MD013": false,
+  // House table style is `|---|---|`, which MD060's aligned and compact styles both reject.
+  "MD060": false,
+  // `<placeholder>` text in templates and ADR stubs reads as inline HTML.
+  "MD033": false,
+  // The house "_Last updated: <date>_" line is emphasis on its own line, not a heading.
+  "MD036": false,
+  // Repeated headings such as "Context" and "Decision" are the ADR format.
+  "MD024": { "siblings_only": true }
+}

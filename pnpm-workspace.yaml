@@ -1,0 +1,14 @@
+# Supply-chain gates (ADR-1016: set explicitly, even where they match pnpm 11's defaults).
+
+# Native build scripts are blocked; any exception is listed and reviewed individually.
+onlyBuiltDependencies: []
+
+# ADR-1007's cooldown on the npm side: a release must be a day old before any install takes it,
+# including a manual `pnpm add`.
+minimumReleaseAge: 1440
+
+# Fail the install when a package's trust evidence drops compared with its earlier releases.
+trustPolicy: no-downgrade
+
+# Transitive dependencies resolve from the registry only: no git URLs or tarballs.
+blockExoticSubdeps: true

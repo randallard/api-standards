@@ -91,6 +91,12 @@ Copy [`TEMPLATE.md`](TEMPLATE.md).
 | ADR | Title | Status |
 |-----|-------|--------|
 | [0000](0000-record-architecture-decisions.md) | Record architecture decisions (use ADRs) | Accepted |
+| [0001](0001-ruleset-uses-built-in-spectral-functions-only.md) | The ruleset uses built-in Spectral functions only | Accepted |
+| [0002](0002-spectral-runs-as-a-pinned-standalone-binary.md) | Spectral runs as a pinned, checksum-verified standalone binary, not from npm | Accepted |
+| [0003](0003-standard-cc-by-ruleset-and-code-apache.md) | The standard is CC BY 4.0; the ruleset and code are Apache-2.0 | Accepted |
+| [0004](0004-doc-lint-markdownlint-and-lychee.md) | The standard's prose is linted by markdownlint and its links by lychee | Accepted |
+| [0005](0005-provable-lite-typescript-no-rust-core.md) | provable-lite TypeScript, with no Rust core | Accepted |
+| [0006](0006-strictness-extras-declined.md) | The any-registry and accessibility-lint extras are declined | Accepted |
 
 ### Inherited standards (from the template; don't edit here)
 
@@ -114,3 +120,4 @@ Copy [`TEMPLATE.md`](TEMPLATE.md).
 | [1015](1015-logic-beyond-provable-lite-moves-to-a-rust-core.md) | UI logic that needs more than provable-lite moves into a Rust core compiled to WASM | Accepted |
 | [1016](1016-pnpm-supply-chain-settings-stay-explicit.md) | pnpm supply-chain settings stay explicit, and major pnpm bumps are evaluated first | Accepted |
 | [1017](1017-state-is-managed-facts-managed-position-derived-values.md) | State is managed facts, managed position and derived values, and a screen's transitions go through one pure, property-tested reducer | Accepted |
+| [1018](1018-osv-scanner-reads-the-whole-lockfile.md) | OSV-Scanner is at least v2.7.0, and a scan is read by its package count, not just its verdict | Accepted |

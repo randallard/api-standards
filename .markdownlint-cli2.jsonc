@@ -1,0 +1,13 @@
+// Which files markdownlint-cli2 checks. The rules are in .markdownlint.jsonc (ADR-0004).
+{
+  "globs": ["*.md", "docs/**/*.md"],
+  // Inherited from the template, which owns their format (ADR-1000). Lint them there, not here.
+  "ignores": [
+    "node_modules/**",
+    ".tools/**",
+    "docs/adr/1*.md",
+    "docs/adr/TEMPLATE.md",
+    "docs/journal/README.md",
+    "docs/reviews/README.md"
+  ]
+}

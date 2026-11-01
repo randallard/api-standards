@@ -162,8 +162,12 @@ decides the job. `osv-scan` is `google/osv-scanner-action`, and its scanner is a
 container:
 
 ```
-docker run --rm -v "$PWD:/src" -w /src ghcr.io/google/osv-scanner:v2.3.8 -r ./
+docker run --rm -v "$PWD:/src" -w /src ghcr.io/google/osv-scanner:v2.7.0 -r ./
 ```
+
+Read the "found N packages" line, not just "No issues found": a scanner that parses less of a
+lockfile than it should still says clean. Under pnpm 12 the lockfile is two YAML documents, and
+v2.3.8 read only the first ([ADR-1018](../../../docs/adr/1018-osv-scanner-reads-the-whole-lockfile.md)).
 
 Run it against a clean `git archive` export so a local `node_modules` can't change the answer.
 An unrunnable gate is an untrustworthy one: a repo in this family had `osv-scan` failing on

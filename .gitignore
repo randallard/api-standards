@@ -33,3 +33,6 @@ coverage/
 # Python bytecode (docs-hygiene.py run locally)
 __pycache__/
 *.pyc
+
+# Pinned tool binaries fetched by scripts/install-spectral.sh
+/.tools/

@@ -1,0 +1,7 @@
+// ADRs follow docs/adr/TEMPLATE.md, which puts the Status list and each section's body directly
+// under its heading. Keep the template's shape rather than fighting it.
+{
+  "extends": "../../.markdownlint.jsonc",
+  "MD022": false,
+  "MD032": false
+}

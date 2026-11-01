@@ -1,0 +1,319 @@
+openapi: 3.1.2
+info:
+  title: Document Storage API
+  version: 1.0.0
+  description: >
+    The worked example from Appendix C of the API Standards. A tenant's integration delivers
+    documents with a classification, using its own machine credential. This file must lint clean
+    against spectral/api-standards.yaml, with no errors and no warnings.
+  contact:
+    name: API maintainers
+    url: https://github.com/randallard/api-standards
+  license:
+    name: Apache-2.0
+    identifier: Apache-2.0
+servers:
+  - url: https://documents.example.com
+    description: Production. The base path lives here, never in the paths (§8).
+tags:
+  - name: documents
+    description: Documents and the actions taken on them.
+security:
+  - oauth: [documents:read]
+paths:
+  /v1/documents:
+    get:
+      operationId: listDocuments
+      summary: List the caller's tenant's documents
+      description: Cursor-paginated (§11). There's no total count, by design.
+      tags: [documents]
+      security:
+        - oauth: [documents:read]
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: One page of documents.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPage'
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+    post:
+      operationId: createDocument
+      summary: Deliver a document to the caller's own tenant
+      description: >
+        The tenant comes from the credential's claim, never from the request (§14). A repeat with
+        the same sourceId returns 409 with the original Location (§8, retries).
+      tags: [documents]
+      security:
+        - oauth: [documents:write]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, classification]
+              properties:
+                file:
+                  type: string
+                  contentMediaType: application/pdf
+                  description: The PDF. At most 50 MB (§7).
+                classification:
+                  $ref: '#/components/schemas/Classification'
+                sourceId:
+                  type: string
+                  maxLength: 128
+                  description: >
+                    The document's identifier in the sending system. Unique within the caller's
+                    tenant.
+      responses:
+        '201':
+          description: Created.
+          headers:
+            Location: { $ref: '#/components/headers/Location' }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '413': { $ref: '#/components/responses/Problem' }
+        '415': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /v1/documents/validate:
+    post:
+      operationId: validateDocument
+      summary: Check a file against the upload rules without storing it
+      description: A computation. It creates, changes and deletes nothing (§8 computations).
+      tags: [documents]
+      x-computation: true
+      security:
+        - oauth: [documents:write]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  contentMediaType: application/pdf
+                  description: The PDF to check.
+      responses:
+        '200':
+          description: The verdict.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '413': { $ref: '#/components/responses/Problem' }
+        '415': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /v1/documents/{documentId}:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    get:
+      operationId: getDocument
+      summary: Read one document's metadata
+      description: >
+        A caller who isn't entitled to know a restricted document exists gets 404, never 403 (§15).
+      tags: [documents]
+      security:
+        - oauth: [documents:read]
+      responses:
+        '200':
+          description: The document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /v1/documents/{documentId}/restorations:
+    parameters:
+      - $ref: '#/components/parameters/DocumentId'
+    post:
+      operationId: restoreDocument
+      summary: Restore a soft-deleted document
+      description: An action modeled as a resource named for the event (§8 actions).
+      tags: [documents]
+      security:
+        - oauth: [documents:restore]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+                  description: Why the document is being restored. Recorded on the restoration.
+      responses:
+        '201':
+          description: The restoration record.
+          headers:
+            Location: { $ref: '#/components/headers/Location' }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      description: OAuth 2.0. Machine clients use client credentials, one client per tenant per application (§14).
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          scopes:
+            documents:read: Read the tenant's documents.
+            documents:write: Deliver documents to the tenant.
+            documents:restore: Restore the tenant's soft-deleted documents.
+  parameters:
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      description: The document's identifier.
+      schema:
+        type: string
+        format: uuid
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Opaque position, taken from a `next` or `prev` link (§11).
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Items per page. Defaults to 50; values above 200 are clamped to 200 (§11).
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
+  headers:
+    Location:
+      description: The URL of the created resource.
+      schema:
+        type: string
+        format: uri-reference
+    RetryAfter:
+      description: Seconds to wait before retrying (§17).
+      schema:
+        type: integer
+        minimum: 0
+  responses:
+    Problem:
+      description: An RFC 9457 problem (§10).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: Throttled (§17).
+      headers:
+        Retry-After: { $ref: '#/components/headers/RetryAfter' }
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    Classification:
+      type: string
+      description: >
+        How the document may be seen. `public`: any role in the tenant. `internal`: staff roles
+        only. `restricted`: only roles granted the document; anyone else is told it doesn't
+        exist (§15).
+      enum: [public, internal, restricted]
+    Document:
+      type: object
+      required: [documentId, classification, createDate]
+      properties:
+        documentId:
+          type: string
+          format: uuid
+          description: The document's identifier.
+        classification:
+          $ref: '#/components/schemas/Classification'
+        sourceId:
+          type: string
+          description: The identifier the sending system gave it.
+        createDate:
+          type: string
+          format: date-time
+          description: When the document was created.
+        updateDate:
+          type: string
+          format: date-time
+          description: When the document was last updated.
+    DocumentPage:
+      type: object
+      required: [items, self]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        self:
+          type: string
+          format: uri-reference
+          description: This page.
+        next:
+          type: string
+          format: uri-reference
+          description: The next page, absent on the last page.
+        prev:
+          type: string
+          format: uri-reference
+          description: The previous page, absent on the first page.
+    ValidationResult:
+      type: object
+      required: [acceptable]
+      properties:
+        acceptable:
+          type: boolean
+          description: Whether an upload of this file would be accepted.
+        reasons:
+          type: array
+          description: Why not, when it wouldn't.
+          items:
+            type: string
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          description: Identifies the problem type.
+        title:
+          type: string
+          description: A short summary of the problem type.
+        status:
+          type: integer
+          description: The HTTP status code.
+        detail:
+          type: string
+          description: An explanation specific to this occurrence.
+        instance:
+          type: string
+          format: uri-reference
+          description: Identifies this occurrence.
+        correlationId:
+          type: string
+          description: The request's X-Correlation-Id (§8).

@@ -127,7 +127,11 @@ jobs:
           node-version: 24 # ADR-1013
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # The Spectral CLI is a pinned, checksum-verified standalone binary, not an npm package
+      # (ADR-0002). The tests and lint:examples run it from .tools/.
+      - run: ./scripts/install-spectral.sh
       - run: pnpm lint
+      - run: pnpm lint:examples
       - run: pnpm test
       - run: pnpm build
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
@@ -158,10 +162,12 @@ jobs:
         # version on a known-bad list", this asks "was this tarball actually
         # published by who the registry says, and built where it claims".
         run: pnpm audit signatures
+      # PSF-2.0 added here: argparse 3.x (via markdownlint-cli2 → js-yaml) relabelled its
+      # Python-2.0 licence with the PSF-2.0 SPDX id. Same licence, already allowed under its old id.
       - name: license allowlist
         run: >
           pnpm exec license-checker-rseidelsohn
-          --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;CC0-1.0;Python-2.0;BlueOak-1.0.0;MPL-2.0;CC-BY-3.0"
+          --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;CC0-1.0;Python-2.0;PSF-2.0;BlueOak-1.0.0;MPL-2.0;CC-BY-3.0"
           --excludePrivatePackages
 
   # ── Shared ──────────────────────────────────────────────────────────────────
@@ -199,9 +205,27 @@ jobs:
       actions: read
     # No timeout-minutes here (ADR-1005's one exception): GitHub rejects it on a job that calls a
     # reusable workflow; the called workflow's own jobs carry their limits.
+    # v2.7.0 at least (ADR-1018): pnpm 12 writes a two-document lockfile, and v2.3.8 reads only the
+    # first (pnpm's own packages), so it passes while scanning none of the project's.
     # Reusable workflow — pinned by tag because `uses:` on a reusable workflow
     # resolves a ref in that repo the same way; bump deliberately.
-    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@9a498708959aeaef5ef730655706c5a1df1edbc2 # v2.3.8
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
+
+  # External links in the standard and the docs (ADR-0004). It gates, because a standard whose
+  # citations 404 is wrong in a way readers notice, but it retries and accepts 429 so a flaky
+  # site doesn't fail an unrelated change.
+  link-check:
+    name: link check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # ADR-1005
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: --config lychee.toml --no-progress './*.md' './docs/**/*.md'
+          fail: true
 
   # Runs on every project, with or without a manifest: a secret can be committed to any repo.
   # Not a marketplace action: gitleaks-action needs a paid license on organisation accounts, and
