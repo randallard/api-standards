@@ -1,6 +1,6 @@
 # Progress & Status
 
-_Last updated: 2026-11-24 (template picked up, first stance review; uncommitted, waiting on Ryan's review)_
+_Last updated: 2026-11-24 (template picked up, first stance review; committed `c78fdfa`, not pushed)_
 
 ## Status / next
 
@@ -9,7 +9,7 @@ GOV.UK citations stay as references, the template's ADR-1018 (OSV-Scanner v2.7.0
 and four dev-tooling advisories are overridden in `pnpm-workspace.yaml`. The README's
 `extends:` URL resolves. See [journal 11-01](journal/2026-11-01-first-ci-run-and-v0-1-0.md).
 
-**2026-11-24, uncommitted, waiting on Ryan's local review:** the template is picked up
+**2026-11-24, committed as `c78fdfa` (Ryan approved), not pushed yet:** the template is picked up
 (ADRs 1019–1024, Node 26, `deny.toml`, `renovate.json` minus automerge per
 [ADR-0007](adr/0007-renovate-automerge-waits-for-required-checks.md), current workflows and skills),
 Spectral is on 6.17.1, and the [first stance review](reviews/2026-11-24-stance-review.md) is written.
@@ -18,8 +18,8 @@ Lint, `lint:examples`, 30/30 tests, build, audit and docs hygiene are clean loca
 
 **Next:**
 
-1. Ryan reviews the diff, then commit, run the private scrub check, and push (`gr push --only
-   api-standards`, then GitHub). Check that CI is green on Node 26 and close the stance-review issue.
+1. Push: Ryan's end-of-day `gr` run sends it to `data`. The GitHub push is separate, after the private
+   scrub check (clean at commit). Then check that CI is green on Node 26 and close the stance-review issue.
 2. The worklist below: further rules, each a minor release.
 3. pnpm 12: evaluate per ADR-1016 (deferred by the stance review).
 

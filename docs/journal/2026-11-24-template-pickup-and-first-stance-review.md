@@ -18,3 +18,6 @@ CI and `engines` were on Node 24 instead of ADR-1022's 26, and there was no stan
   stands.
 - Locally: lint, `lint:examples`, 30/30 tests, `tsc`, `pnpm audit` and docs hygiene all pass.
 - Nothing is committed. It's waiting on Ryan's review.
+
+- Later the same day: Ryan approved, and it was committed as `c78fdfa` with the scrub check clean. It
+  isn't pushed: `gr` now runs at Ryan's end of day.
