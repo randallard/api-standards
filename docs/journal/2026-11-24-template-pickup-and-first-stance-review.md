@@ -21,3 +21,4 @@ CI and `engines` were on Node 24 instead of ADR-1022's 26, and there was no stan
 
 - Later the same day: Ryan approved, and it was committed as `c78fdfa` with the scrub check clean. It
   isn't pushed: `gr` now runs at Ryan's end of day.
+- Pushed (Ryan: "commit api-standards and push it"): `1943b20` is on `data` and GitHub, scrub check clean. CI run 45493902376 passed every TS, supply-chain, OSV, SBOM, secret and link job; the Rust and api-lint jobs skipped by design. Stance-review issue #1 is closed.
