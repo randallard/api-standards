@@ -97,6 +97,7 @@ Copy [`TEMPLATE.md`](TEMPLATE.md).
 | [0004](0004-doc-lint-markdownlint-and-lychee.md) | The standard's prose is linted by markdownlint and its links by lychee | Accepted |
 | [0005](0005-provable-lite-typescript-no-rust-core.md) | provable-lite TypeScript, with no Rust core | Accepted |
 | [0006](0006-strictness-extras-declined.md) | The any-registry and accessibility-lint extras are declined | Accepted |
+| [0007](0007-renovate-automerge-waits-for-required-checks.md) | Renovate's automerge rules wait until `main` requires the CI checks | Accepted |
 
 ### Inherited standards (from the template; don't edit here)
 
@@ -115,9 +116,15 @@ Copy [`TEMPLATE.md`](TEMPLATE.md).
 | [1010](1010-typescript-stays-on-6-until-the-lint-gate-supports-7.md) | TypeScript stays on 6.x until the type-aware lint gate supports 7 | Accepted |
 | [1011](1011-typescript-strictness-bar.md) | The TypeScript strictness bar matches what the repos already run | Accepted |
 | [1012](1012-strictness-extras-offered-at-project-start.md) | Engineering-Strategy's TS extras are offered as an opt-in at every project start | Accepted |
-| [1013](1013-node-24-lts-in-ci.md) | CI runs Node 24 LTS | Accepted |
+| [1013](1013-node-24-lts-in-ci.md) | CI runs Node 24 LTS | Superseded by [ADR-1020](1020-ci-runs-the-active-lts-and-the-engines-floor-trails-it.md) |
 | [1014](1014-npm-trusted-publishing-hygiene.md) | npm trusted publishing: bind by repository ID, never from comment- or fork-triggered workflows | Accepted |
 | [1015](1015-logic-beyond-provable-lite-moves-to-a-rust-core.md) | UI logic that needs more than provable-lite moves into a Rust core compiled to WASM | Accepted |
 | [1016](1016-pnpm-supply-chain-settings-stay-explicit.md) | pnpm supply-chain settings stay explicit, and major pnpm bumps are evaluated first | Accepted |
 | [1017](1017-state-is-managed-facts-managed-position-derived-values.md) | State is managed facts, managed position and derived values, and a screen's transitions go through one pure, property-tested reducer | Accepted |
 | [1018](1018-osv-scanner-reads-the-whole-lockfile.md) | OSV-Scanner is at least v2.7.0, and a scan is read by its package count, not just its verdict | Accepted |
+| [1019](1019-http-apis-lint-against-a-vendored-api-standards-ruleset.md) | HTTP APIs are linted in CI against a vendored, pinned api-standards ruleset | Accepted |
+| [1020](1020-ci-runs-the-active-lts-and-the-engines-floor-trails-it.md) | CI runs the Active LTS (Node 26); the engines floor stays one LTS behind (24) | Superseded by [ADR-1022](1022-ci-the-engines-floor-and-types-node-share-the-active-lts.md) |
+| [1021](1021-projects-start-with-a-renovate-config.md) | Projects start with a Renovate config that encodes the standards it could break | Accepted |
+| [1022](1022-ci-the-engines-floor-and-types-node-share-the-active-lts.md) | CI, the engines floor and `@types/node` all follow the Active LTS (Node 26) | Accepted |
+| [1023](1023-routine-renovate-updates-merge-themselves.md) | Routine Renovate updates merge themselves once CI passes; majors stay manual | Accepted |
+| [1024](1024-the-template-ships-an-explicit-deny-toml.md) | The template ships an explicit `deny.toml`, and unmaintained crates are checked across the whole graph | Accepted |

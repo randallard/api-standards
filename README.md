@@ -40,7 +40,7 @@ binary rather than from npm ([ADR-0002](docs/adr/0002-spectral-runs-as-a-pinned-
 
 ```bash
 pnpm install
-./scripts/install-spectral.sh   # linux-x64; elsewhere set SPECTRAL_BIN to Spectral 6.17.0
+./scripts/install-spectral.sh   # linux-x64; elsewhere set SPECTRAL_BIN to Spectral 6.17.1
 pnpm lint                       # eslint + markdownlint
 pnpm lint:examples              # the examples lint clean against the ruleset
 pnpm test                       # every rule fires on its mutation; property tests on naming

@@ -16,10 +16,14 @@ permissions:
 jobs:
   remind:
     name: check review freshness
+    # Not in the template itself: its docs/reviews/ is copied into every new project, so the
+    # template's own stance reviews are recorded outside this repo, and this check could never
+    # pass here. A project made from the template has its own repository name and runs it.
+    if: github.repository != 'randallard/cr-ci-cd-rust-typescript-template'
     runs-on: ubuntu-latest
     timeout-minutes: 15 # ADR-1005
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 

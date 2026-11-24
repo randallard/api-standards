@@ -9,8 +9,8 @@
 #     -q '.assets[]|select(.name=="spectral-linux-x64")|.digest'
 set -euo pipefail
 
-SPECTRAL_VERSION="6.17.0"
-SPECTRAL_SHA256="e6244baecff57dfb89ba8379a09563270fbb4ac7f73fb8692510a6160059ec53" # spectral-linux-x64
+SPECTRAL_VERSION="6.17.1"
+SPECTRAL_SHA256="0196c72234478e4e23df28b662afa7c9f80a47cfd31dc697e674151ad060bb35" # spectral-linux-x64
 
 case "$(uname -s)-$(uname -m)" in
   Linux-x86_64) asset="spectral-linux-x64" ;;

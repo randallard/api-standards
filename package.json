@@ -7,7 +7,7 @@
   "type": "module",
   "packageManager": "pnpm@11.5.3",
   "engines": {
-    "node": ">=24.0.0",
+    "node": ">=26.0.0",
     "pnpm": ">=11.0.0"
   },
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "eslint": "10.13.0",
     "fast-check": "4.10.2",
     "license-checker-rseidelsohn": "5.0.1",
